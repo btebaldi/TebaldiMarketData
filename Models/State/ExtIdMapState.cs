@@ -6,25 +6,23 @@ using System.Threading.Tasks;
 
 namespace Tebaldi.MarketData.Models.State
 {
-    public class FeedFilterState
+    class ExtIdMapState
     {
         public int Id { get; set; }
-        public int FeedId { get; set; }
-        public string ColumnName { get; set; }
-        public string ColumnValue { get; set; }
+        public string ExtId { get; set; }
+        public int TebBizAtivoId { get; set; }
 
         public SchemaStruct Schema;
 
         #region "Constructors"
-        public FeedFilterState()
+        public ExtIdMapState()
         {
             Schema = new SchemaStruct();
-            Schema.ObjectName = "TB_FeedFilter";
+            Schema.ObjectName = "TB_ExtId_Map";
 
             Schema.Id = "Id";
-            Schema.FeedId = "FeedId";
-            Schema.ColumnName = "ColumnName";
-            Schema.ColumnValue = "ColumnValue";
+            Schema.ExtId = "EXT_ID";
+            Schema.TebBizAtivoId = "TebaldiBiz_AtivoId";
         }
         #endregion
 
@@ -37,11 +35,9 @@ namespace Tebaldi.MarketData.Models.State
 
             // Nome das colunas
             public string Id;
-            public string FeedId;
-            public string ColumnName;
-            public string ColumnValue;
+            public string ExtId;
+            public string TebBizAtivoId;
         }
         #endregion
-
     }
 }

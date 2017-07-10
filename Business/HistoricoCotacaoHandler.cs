@@ -66,6 +66,33 @@ namespace Tebaldi.MarketData
             table.Columns.Add(obj.Schema.Variacao, typeof(System.Decimal));
             return table;
         }
+
+
+        public static List<String> GetColumnNames()
+        {
+            List<string> lst = new List<string>();
+            Models.State.HistoricoCotacaoState obj = new Models.State.HistoricoCotacaoState();
+
+            lst.Add(obj.Schema.EXT_ID);
+            lst.Add(obj.Schema.AtivoId);
+            lst.Add(obj.Schema.FeedId);
+            lst.Add(obj.Schema.DataPregao);
+            lst.Add(obj.Schema.Ticker);
+            lst.Add(obj.Schema.TipoMercado);
+            lst.Add(obj.Schema.NomeResumido);
+            lst.Add(obj.Schema.EspecificacaoPapel);
+            lst.Add(obj.Schema.PrecoAbertura);
+            lst.Add(obj.Schema.PrecoMaximo);
+            lst.Add(obj.Schema.PrecoMinimo);
+            lst.Add(obj.Schema.PrecoMedio);
+            lst.Add(obj.Schema.PrecoFechamento);
+            lst.Add(obj.Schema.TotalNegocios);
+            lst.Add(obj.Schema.Quantidade);
+            lst.Add(obj.Schema.Volume);
+            lst.Add(obj.Schema.ISIN);
+            lst.Add(obj.Schema.Variacao);
+            return lst;
+        }
         #endregion
 
 

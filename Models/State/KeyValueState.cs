@@ -12,7 +12,7 @@ namespace Tebaldi.MarketData.Models.State
         public int FeedId { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
-        public bool FeedSprecific { get; set; }
+        public bool FeedSpecific { get; set; }
 
         readonly SchemaStruct _schema;
             public SchemaStruct Schema { get { return _schema; } }

@@ -70,18 +70,7 @@ namespace Tebaldi.MarketData.Models
 
             //return boolRet;
         }
-
-        //private void FillFromDataReader(IDataReader dr, EmpresaState empresa)
-        //{
-        //    throw new NotImplementedException();
-
-        //    empresa.IdEmpresa = Convert.ToInt32(dr[empresa.Schema.IdEmpresa]);
-        //    empresa.CodEmpresa = dr[empresa.Schema.CodEmpresa].ToString();
-        //    empresa.DenominacaoSocial = dr[empresa.Schema.DenominacaoSocial].ToString();
-        //    empresa.NomeResumido = dr[empresa.Schema.NomeResumido].ToString();
-        //    empresa.DataRegistro = Convert.ToDateTime(dr[empresa.Schema.DataRegistro]);
-        //}
-
+        
         #endregion
 
         #region "Data Modification Methods"

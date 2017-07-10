@@ -46,7 +46,10 @@
     <Compile Include="Models\QueueDC.cs" />
     <Compile Include="Models\FeedDC.cs" />
     <Compile Include="Models\HistoricoCotacaoDC.cs" />
+    <Compile Include="Models\State\ExtIdMapState.cs" />
     <Compile Include="Models\State\FeedFilterState.cs" />
+    <Compile Include="Models\State\FeedTypeDefaultKeyState.cs" />
+    <Compile Include="Models\State\FeedTypeState.cs" />
     <Compile Include="Models\State\KeyValueState.cs" />
     <Compile Include="Models\State\ProcessQueueState.cs" />
     <Compile Include="Models\State\FeedState.cs" />
@@ -56,7 +59,7 @@
     <Compile Include="Exceptions\TebaldiMarketDataException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\DataCommon\DataCommon.csproj">
+    <ProjectReference Include="..\Common\DataCommon\DataCommon.csproj">
       <Project>{6fa2d86b-da87-486f-83bf-62b4474c1f4c}</Project>
       <Name>DataCommon</Name>
     </ProjectReference>

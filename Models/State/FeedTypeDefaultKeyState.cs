@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Tebaldi.MarketData.Models.State
 {
-    public class FeedState
+    class FeedTypeDefaultKeyState
     {
         public int ID { get; set; }
-        public string Name { get; set; }
-        public FeedTypeStateEnum Type { get; set; }
-        public bool Active { get; set; }
+        public string FeedTypeId { get; set; }
+        public string Key { get; set; }
 
         readonly SchemaStruct _schema;
         public SchemaStruct Schema { get { return _schema; } }
@@ -21,16 +19,13 @@ namespace Tebaldi.MarketData.Models.State
         /// <summary>
         /// Constructor
         /// </summary>
-        public FeedState()
+        public FeedTypeDefaultKeyState()
         {
-            Name = "";
-
             _schema = new SchemaStruct();
-            _schema.ObjectName = "TB_Feed";
-            _schema.FeedId = "FeedId";
-            _schema.Name = "Name";
+            _schema.ObjectName = "TB_FeedTypeDefaultKeys";
+            _schema.Id = "DefaultKeyId";
             _schema.FeedTypeId = "FeedTypeId";
-            _schema.Active = "Active";
+            _schema.Key = "Chave";
         }
         #endregion
 
@@ -39,10 +34,9 @@ namespace Tebaldi.MarketData.Models.State
         public struct SchemaStruct
         {
             public string ObjectName;
-            public string FeedId;
-            public string Name;
+            public string Id;
             public string FeedTypeId;
-            public string Active;
+            public string Key;
         }
         #endregion
     }

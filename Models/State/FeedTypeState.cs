@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Tebaldi.MarketData.Models.State
 {
-    public class FeedState
+    class FeedTypeState
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
         public FeedTypeStateEnum Type { get; set; }
-        public bool Active { get; set; }
+        public int ID { get { return (int)Type; } }
+        public string EnumCode { get { return ID.ToString(); } }
+        public string Descricao { get; set; }
+        public List<FeedTypeDefaultKeyState> DefaultKeys = new List<FeedTypeDefaultKeyState>();
 
         readonly SchemaStruct _schema;
         public SchemaStruct Schema { get { return _schema; } }
@@ -21,16 +21,13 @@ namespace Tebaldi.MarketData.Models.State
         /// <summary>
         /// Constructor
         /// </summary>
-        public FeedState()
+        public FeedTypeState()
         {
-            Name = "";
-
             _schema = new SchemaStruct();
-            _schema.ObjectName = "TB_Feed";
-            _schema.FeedId = "FeedId";
-            _schema.Name = "Name";
-            _schema.FeedTypeId = "FeedTypeId";
-            _schema.Active = "Active";
+            _schema.ObjectName = "TB_FeedType";
+            _schema.Id = "FeedTypeId";
+            _schema.EnumCode = "EnumCode";
+            _schema.Descricao = "Descricao";
         }
         #endregion
 
@@ -39,11 +36,18 @@ namespace Tebaldi.MarketData.Models.State
         public struct SchemaStruct
         {
             public string ObjectName;
-            public string FeedId;
-            public string Name;
-            public string FeedTypeId;
-            public string Active;
+            public string Id;
+            public string EnumCode;
+            public string Descricao;
         }
         #endregion
     }
+
+    public enum FeedTypeStateEnum
+    {
+        BDI = 1,
+        //Csv = 2,
+        //CsvNoHeader
+    }
+
 }
