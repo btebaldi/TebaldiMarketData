@@ -24,6 +24,17 @@ namespace Tebaldi.MarketData.Models
         #region Feed State Retrival
         public List<FeedState> GetFeeds()
         {
+            return GetFeeds(null);
+        }
+
+        public FeedState GetFeed(int Id)
+        {
+            FeedState feed = GetFeeds(Id).Find(f => f.ID == Id);
+            return feed;
+        }
+
+        private List<FeedState> GetFeeds(int? feedId)
+        {
             IDbCommand cmd;
             State.FeedState obj = new State.FeedState();
 
@@ -32,25 +43,73 @@ namespace Tebaldi.MarketData.Models
 
             cmd = DataLayer.CreateCommand(strSQL, mstrConnectString);
             cmd.CommandType = CommandType.StoredProcedure;
+            if (feedId != null)
+            {
+                cmd.Parameters.Add(DataLayer.CreateParameter("@FeedId", DbType.Int32, feedId, mstrConnectString));
+            }
 
             DataSet ds = DataLayer.GetDataSet(cmd, mstrConnectString);
 
-            List<FeedState> lstFeeds = (from dr in ds.Tables[0].AsEnumerable()
+            // Set table names, just for information
+            ds.Tables[0].TableName = "TB_Feed";
+            ds.Tables[1].TableName = "TB_FeedKeyValue";
+            ds.Tables[2].TableName = "TB_FeedTransformation";
+            ds.Tables[3].TableName = "TB_FeedFilter";
+
+            List<FeedState> lstFeeds = (from dr in ds.Tables["TB_Feed"].AsEnumerable()
                                         select new State.FeedState()
                                         {
                                             ID = Convert.ToInt32(dr[obj.Schema.FeedId]),
                                             Name = dr[obj.Schema.Name].ToString(),
-                                            Type = (FeedTypeStateEnum)dr[obj.Schema.FeedTypeId],
-                                            Active = Convert.ToBoolean(dr[obj.Schema.Active])
+                                            Type = (FeedTypeEnum)dr[obj.Schema.FeedTypeId],
                                         }).ToList();
+
+
+
+            State.KeyValueState objKV = new State.KeyValueState();
+            State.FeedTransformationState objTR = new State.FeedTransformationState();
+            State.FeedFilterState objFL = new State.FeedFilterState();
+            foreach (FeedState feed in lstFeeds)
+            {
+
+                feed.KeyValues = (from dr in ds.Tables["TB_FeedKeyValue"].AsEnumerable()
+                                  where dr.Field<int>("FeedId") == feed.ID
+                                  select new State.KeyValueState()
+                                  {
+                                      KeyValueId = Convert.ToInt32(dr[objKV.Schema.Id]),
+                                      FeedId = Convert.ToInt32(dr[objKV.Schema.FeedId]),
+                                      FeedSpecific = Convert.ToBoolean(dr[objKV.Schema.Id]),
+                                      Key = Convert.ToString(dr[objKV.Schema.Key]),
+                                      Value = Convert.ToString(dr[objKV.Schema.Value])
+                                  }).ToList();
+
+                feed.Transformations = (from dr in ds.Tables["TB_FeedTransformation"].AsEnumerable()
+                                        where dr.Field<int>("FeedId") == feed.ID
+                                        select new State.FeedTransformationState()
+                                        {
+                                            TransformationId = Convert.ToInt32(dr[objTR.Schema.TransformationId]),
+                                            FeedId = Convert.ToInt32(dr[objTR.Schema.FeedId]),
+                                            ExecuteOrder = Convert.ToInt32(dr[objTR.Schema.ExecuteOrder]),
+                                            OriginalValue = Convert.ToString(dr[objTR.Schema.OriginalValue]),
+                                            OriginalColumn = Convert.ToString(dr[objTR.Schema.OriginalColumn]),
+                                            NewValue = Convert.ToString(dr[objTR.Schema.NewValue]),
+                                            NewColumn = Convert.ToString(dr[objTR.Schema.NewColumn])
+                                        }).ToList();
+
+                feed.Filter = (from dr in ds.Tables["TB_FeedFilter"].AsEnumerable()
+                               where dr.Field<int>("FeedId") == feed.ID
+                               select new State.FeedFilterState()
+                               {
+                                   Id = Convert.ToInt32(dr[objFL.Schema.Id]),
+                                   FeedId = Convert.ToInt32(dr[objFL.Schema.FeedId]),
+                                   ColumnName = Convert.ToString(dr[objFL.Schema.ColumnName]),
+                                   ColumnValue = Convert.ToString(dr[objFL.Schema.ColumnValue])
+                               }).ToList();
+            }
 
             return lstFeeds;
         }
 
-        public FeedState GetFeed(int Id)
-        {
-            return GetFeeds().Find(f => f.ID == Id);
-        }
         #endregion
 
         #region Feed Key Value Retrival
@@ -223,30 +282,34 @@ namespace Tebaldi.MarketData.Models
         #endregion
 
         #region Feed Type
-        //public List<FeedTypeState> GetFeedTypeById(int feedTypeId)
-        //{
-        //    IDbCommand cmd;
-        //    State.FeedTypeState obj = new State.FeedTypeState();
+        public List<FeedTypeDefaultKeyState> GetFeedTypeDefaults(int? feedTypeId)
+        {
+            IDbCommand cmd;
+            State.FeedTypeDefaultKeyState obj = new State.FeedTypeDefaultKeyState();
 
-        //    string strSQL;
-        //    strSQL = "procGetFeedType";
+            string strSQL;
+            strSQL = "procGetFeedTypeDefaultValues";
 
-        //    cmd = DataLayer.CreateCommand(strSQL, mstrConnectString);
-        //    cmd.CommandType = CommandType.StoredProcedure;
+            cmd = DataLayer.CreateCommand(strSQL, mstrConnectString);
+            if (feedTypeId != null)
+            {
+                cmd.Parameters.Add(DataLayer.CreateParameter("@FeedTypeId", DbType.Int32, feedTypeId, mstrConnectString));
+            }
 
-        //    DataSet ds = DataLayer.GetDataSet(cmd, mstrConnectString);
+            cmd.CommandType = CommandType.StoredProcedure;
 
-        //    List<FeedState> lstFeeds = (from dr in ds.Tables[0].AsEnumerable()
-        //                                select new State.FeedState()
-        //                                {
-        //                                    ID = Convert.ToInt32(dr[obj.Schema.FeedId]),
-        //                                    Name = dr[obj.Schema.Name].ToString(),
-        //                                    Type = (FeedTypeStateEnum)dr[obj.Schema.FeedType],
-        //                                    Active = Convert.ToBoolean(dr[obj.Schema.Active])
-        //                                }).ToList();
+            DataSet ds = DataLayer.GetDataSet(cmd, mstrConnectString);
 
-        //    return lstFeeds;
-        //}
+            List<FeedTypeDefaultKeyState> lstFeeds = (from dr in ds.Tables[0].AsEnumerable()
+                                                      select new State.FeedTypeDefaultKeyState()
+                                                      {
+                                                          ID = Convert.ToInt32(dr[obj.Schema.Id]),
+                                                          FeedTypeId = Convert.ToInt32(dr[obj.Schema.FeedTypeId]),
+                                                          Key = Convert.ToString(dr[obj.Schema.Key])
+                                                      }).ToList();
+
+            return lstFeeds;
+        }
 
         #endregion
 
@@ -314,7 +377,6 @@ namespace Tebaldi.MarketData.Models
                 xmlObj.SetAttribute("Name", feed.Name.ToString());
 
                 xmlObj.SetAttribute("FeedTypeId", ((int)feed.Type).ToString());
-                xmlObj.SetAttribute("Active", feed.Active.ToString());
 
                 root.AppendChild(xmlObj);
 

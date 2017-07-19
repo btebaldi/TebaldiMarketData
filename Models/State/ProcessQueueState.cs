@@ -10,7 +10,8 @@ namespace Tebaldi.MarketData.Models.State
     public class ProcessQueueState
     {
         public int QueueId { get; set; }
-        public int FeedId { get; set; }
+        public ImportProcessState Process { get; set; }
+        public DateTime DataAgendada { get; set; }
         public DateTime DataExecucao { get; set; }
         public DateTime DataReferencia { get; set; }
         public bool Executado { get; set; }
@@ -25,10 +26,13 @@ namespace Tebaldi.MarketData.Models.State
         /// </summary>
         public ProcessQueueState()
         {
+            //DataExecucao = null;
+            Process = new ImportProcessState();
             _schema = new SchemaStruct();
             _schema.ObjectName = "TB_ProcessQueue";
             _schema.QueueId = "QueueId";
-            _schema.FeedId = "FeedId";
+            _schema.ProcessId = "ProcessId";
+            _schema.DataAgendada = "DtAgendada";
             _schema.DataExecucao = "DtExecucao";
             _schema.DataReferencia = "DtReferencia";
             _schema.Executado = "Executado";
@@ -42,7 +46,8 @@ namespace Tebaldi.MarketData.Models.State
         {
             public string ObjectName;
             public string QueueId;
-            public string FeedId;
+            public string ProcessId;
+            public string DataAgendada;
             public string DataExecucao;
             public string DataReferencia;
             public string Executado;
@@ -51,10 +56,4 @@ namespace Tebaldi.MarketData.Models.State
         #endregion
     }
 
-    //public enum FeedTypeEnum
-    //{
-    //    BDI,
-    //    Csv,
-    //    CsvNoHeader
-    //}
 }

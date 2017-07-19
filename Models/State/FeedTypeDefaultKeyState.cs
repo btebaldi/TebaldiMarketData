@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Tebaldi.MarketData.Models.State
 {
-    class FeedTypeDefaultKeyState
+    public class FeedTypeDefaultKeyState
     {
         public int ID { get; set; }
-        public string FeedTypeId { get; set; }
+        public int FeedTypeId { get; set; }
         public string Key { get; set; }
 
         readonly SchemaStruct _schema;

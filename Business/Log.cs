@@ -7,10 +7,11 @@ using Tebaldi.MarketData.Models;
 
 namespace Tebaldi.MarketData
 {
-    public class ImpProcessHandler : ProcessDC
+    public class Log : LogDC
     {
+
         #region "Constructors"
-        public ImpProcessHandler(string ConnectString)
+        public Log(string ConnectString)
         { base.ConnectString = ConnectString; }
         #endregion
 

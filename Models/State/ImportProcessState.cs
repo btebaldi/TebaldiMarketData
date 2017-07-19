@@ -6,30 +6,33 @@ using System.Threading.Tasks;
 
 namespace Tebaldi.MarketData.Models.State
 {
-    public class KeyValueState
+    public class ImportProcessState
     {
-        public int KeyValueId { get; set; }
-        public int FeedId { get; set; }
-        public string Key { get; set; }
-        public string Value { get; set; }
-        public bool FeedSpecific { get; set; }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public FeedState Feed { get; set; }
+        public bool AutoQueue { get; set; }
+        public bool Active { get; set; }
 
         readonly SchemaStruct _schema;
         public SchemaStruct Schema { get { return _schema; } }
+
 
         #region "Constructors"
         /// <summary>
         /// Constructor
         /// </summary>
-        public KeyValueState()
+        public ImportProcessState()
         {
+            Feed = new FeedState();
             _schema = new SchemaStruct();
-            _schema.ObjectName = "TB_FeedKeyValue";
-            _schema.Id = "KeyValueId";
+            _schema.ObjectName = "TB_ImportProcess";
+            _schema.Id = "ProcessId";
+            _schema.Name = "Name";
             _schema.FeedId = "FeedId";
-            _schema.Key = "Chave";
-            _schema.Value = "Valor";
-            _schema.FeedSpecific = "FeedSpecific";
+            _schema.AutoQueue = "AutoQueue";
+            _schema.Active = "Active";
         }
         #endregion
 
@@ -39,10 +42,10 @@ namespace Tebaldi.MarketData.Models.State
         {
             public string ObjectName;
             public string Id;
+            public string Name;
             public string FeedId;
-            public string Key;
-            public string Value;
-            public string FeedSpecific;
+            public string AutoQueue;
+            public string Active;
         }
         #endregion
     }

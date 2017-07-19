@@ -43,7 +43,9 @@
     <Compile Include="Business\ImpProcessHandler.cs" />
     <Compile Include="Business\FeedHandler.cs" />
     <Compile Include="Business\HistoricoCotacaoHandler.cs" />
-    <Compile Include="Models\QueueDC.cs" />
+    <Compile Include="Business\Log.cs" />
+    <Compile Include="Models\LogDC.cs" />
+    <Compile Include="Models\ProcessDC.cs" />
     <Compile Include="Models\FeedDC.cs" />
     <Compile Include="Models\HistoricoCotacaoDC.cs" />
     <Compile Include="Models\State\ExtIdMapState.cs" />
@@ -51,6 +53,8 @@
     <Compile Include="Models\State\FeedTypeDefaultKeyState.cs" />
     <Compile Include="Models\State\FeedTypeState.cs" />
     <Compile Include="Models\State\KeyValueState.cs" />
+    <Compile Include="Models\State\ImportProcessState.cs" />
+    <Compile Include="Models\State\LogState.cs" />
     <Compile Include="Models\State\ProcessQueueState.cs" />
     <Compile Include="Models\State\FeedState.cs" />
     <Compile Include="Models\State\FeedTransformationState.cs" />

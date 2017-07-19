@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tebaldi.MarketData.Models.State
 {
-    class ExtIdMapState
+    public class ExtIdMapState
     {
         public int Id { get; set; }
         public string ExtId { get; set; }

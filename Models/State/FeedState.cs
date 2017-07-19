@@ -11,8 +11,31 @@ namespace Tebaldi.MarketData.Models.State
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public FeedTypeStateEnum Type { get; set; }
-        public bool Active { get; set; }
+        public FeedTypeEnum Type { get; set; }
+
+        public List<KeyValueState> _keyValues;
+        public List<KeyValueState> KeyValues
+        {
+            get { return _keyValues; }
+            internal set { _keyValues = value; }
+        }
+
+        private List<FeedTransformationState> _transformations;
+        public List<FeedTransformationState> Transformations
+        {
+            get { return _transformations; }
+            internal set { _transformations = value; }
+        }
+
+        private List<FeedFilterState> _filter;
+        public List<FeedFilterState> Filter
+        {
+            get { return _filter; }
+            internal set { _filter = value; }
+        }
+
+        public string GetValue(string key)
+        { return KeyValues.Find(c => c.Key == key).Value; }
 
         readonly SchemaStruct _schema;
         public SchemaStruct Schema { get { return _schema; } }
@@ -30,7 +53,6 @@ namespace Tebaldi.MarketData.Models.State
             _schema.FeedId = "FeedId";
             _schema.Name = "Name";
             _schema.FeedTypeId = "FeedTypeId";
-            _schema.Active = "Active";
         }
         #endregion
 
@@ -42,7 +64,6 @@ namespace Tebaldi.MarketData.Models.State
             public string FeedId;
             public string Name;
             public string FeedTypeId;
-            public string Active;
         }
         #endregion
     }

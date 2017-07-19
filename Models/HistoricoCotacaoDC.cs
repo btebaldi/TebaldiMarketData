@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 using Tebaldi.MarketData.Models.State;
 using System.Data;
@@ -19,11 +20,51 @@ namespace Tebaldi.MarketData.Models
         }
 
         #region "Data Retrieval Methods"
+        public List<ExtIdMapState> GetIdMapping()
+        {
+            return GetIdMappings(null);
+        }
+
+        public ExtIdMapState GetIdMapping(int id)
+        {
+            ExtIdMapState obj = GetIdMappings(id).Find(f => f.Id == id);
+            return obj;
+        }
+
+        private List<ExtIdMapState> GetIdMappings(int? id)
+        {
+            IDbCommand cmd;
+            string strSQL;
+            Tebaldi.MarketData.Models.State.ExtIdMapState obj = new ExtIdMapState();
+
+
+            strSQL = "procGetExtIdMap";
+
+            cmd = DataLayer.CreateCommand(strSQL, mstrConnectString);
+            cmd.CommandType = CommandType.StoredProcedure;
+            if (id != null)
+            {
+                cmd.Parameters.Add(DataLayer.CreateParameter("@Id", DbType.Int32, id, mstrConnectString));
+            }
+
+            DataSet ds = DataLayer.GetDataSet(cmd, mstrConnectString);
+
+
+            List<ExtIdMapState> lst = (from dr in ds.Tables[0].AsEnumerable()
+                                       select new State.ExtIdMapState()
+                                       {
+                                           Id = Convert.ToInt32(dr[obj.Schema.Id]),
+                                           ExtId = Convert.ToString(dr[obj.Schema.ExtId]),
+                                           TebBizAtivoId = Convert.ToInt32(dr[obj.Schema.TebBizAtivoId])
+                                       }).ToList();
+            return lst;
+        }
+
         public List<HistoricoCotacaoState> GetHistoricoCotacao()
         {
             throw new NotImplementedException();
 
-            List<HistoricoCotacaoState> lstCotacao = new List<HistoricoCotacaoState>();
+            //List<HistoricoCotacaoState> lstCotacao = new List<HistoricoCotacaoState>();
 
             //string strSql = "";
             //{
@@ -70,10 +111,11 @@ namespace Tebaldi.MarketData.Models
 
             //return boolRet;
         }
-        
+
         #endregion
 
-        #region "Data Modification Methods"
+        #region "Historico Cotacao Data Modification Methods"
+
         public virtual void Validate(HistoricoCotacaoState item)
         {
             string strMsg = string.Empty;
@@ -117,8 +159,6 @@ namespace Tebaldi.MarketData.Models
 
             //return DataLayer.ExecuteSQL(cmd, true);
         }
-
-
 
         public int Update(List<HistoricoCotacaoState> empresa)
         {
@@ -167,7 +207,6 @@ namespace Tebaldi.MarketData.Models
             return DataLayer.ExecuteSQL(cmd);
         }
 
-
         public int ImportImpTable()
         {
             IDbCommand cmd;
@@ -178,6 +217,7 @@ namespace Tebaldi.MarketData.Models
             cmd = DataLayer.CreateCommand(strSQL, mstrConnectString);
             return DataLayer.ExecuteSQL(cmd);
         }
+
         //protected void FillInParameters(EmpresaState empresa, IDbCommand cmd)
         //{
         //    throw new NotImplementedException();
@@ -193,6 +233,83 @@ namespace Tebaldi.MarketData.Models
         //    //cmd.Parameters.Add(DataLayer.CreateParameter("@" + mov.Schema.ValorContabil, DbType.Decimal, mov.ValorContabil));
         //    //cmd.Parameters.Add(DataLayer.CreateParameter("@" + mov.Schema.Lucro, DbType.Decimal, mov.Lucro));
         //}
+        #endregion
+
+        #region "Ext Id Map Data Modification Methods"
+
+        public virtual void Validate(ExtIdMapState item)
+        {
+            string strMsg = string.Empty;
+
+            if (String.IsNullOrEmpty(item.ExtId))
+            { strMsg += "Identificador externo do ativo invalido." + Environment.NewLine; }
+
+            //if (String.IsNullOrEmpty(item.CodEmpresa))
+            //{ strMsg += "O Codigo da empresa deve ser preenchido." + Environment.NewLine; }
+
+            if (item.Id < 0)
+            { strMsg += "O identificador deve ser positivo." + Environment.NewLine; }
+
+            if (item.TebBizAtivoId < 0)
+            { strMsg += "O identificador (TebaldiBiz.Id) deve ser positivo." + Environment.NewLine; }
+
+            if (strMsg != string.Empty)
+            { throw new TebaldiMarketDataException(strMsg); }
+        }
+
+        public int Save(State.ExtIdMapState extIdMap)
+        {
+            List<ExtIdMapState> lst = new List<ExtIdMapState>();
+            lst.Add(extIdMap);
+
+            return Save(lst);
+        }
+
+        public int Save(List<ExtIdMapState> lst)
+        {
+            IDbCommand cmd;
+            string strSQL;
+
+            // Check Business Rules
+            foreach (State.ExtIdMapState item in lst)
+            {
+                Validate(item);
+            }
+
+            strSQL = "procGravaExtIdMap";
+
+            cmd = DataLayer.CreateCommand(strSQL, mstrConnectString);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(DataLayer.CreateParameter("@extIdMapList", DbType.String, ParseToXml(lst), mstrConnectString));
+
+            return DataLayer.ExecuteSQL(cmd);
+        }
+
+        protected string ParseToXml(List<State.ExtIdMapState> lst)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            int nodeContador = 1;
+
+            XmlElement root = xmlDoc.CreateElement("ROOT");
+            xmlDoc.AppendChild(root);
+
+            foreach (State.ExtIdMapState item in lst)
+            {
+                XmlElement xmlObj = xmlDoc.CreateElement("ExtIdMap");
+                xmlObj.SetAttribute("NodeId", nodeContador.ToString());
+                xmlObj.SetAttribute("Id", item.Id.ToString());
+                xmlObj.SetAttribute("EXT_ID", item.ExtId);
+
+                xmlObj.SetAttribute("TebaldiBiz_AtivoId", item.TebBizAtivoId.ToString());
+
+                root.AppendChild(xmlObj);
+
+                nodeContador++;
+            }
+
+            return xmlDoc.OuterXml;
+        }
+
         #endregion
     }
 }
