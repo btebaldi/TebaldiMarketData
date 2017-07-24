@@ -10,7 +10,7 @@ namespace Tebaldi.MarketData.Models.State
     {
         public string EXT_ID { get; set; }
         public int AtivoId { get; set; }
-        public string FeedId { get; set; }
+        public int ProcessId { get; set; }
         public DateTime DataPregao { get; set; }
         public string Ticker { get; set; }
         public int? TipoMercado { get; set; }
@@ -33,7 +33,7 @@ namespace Tebaldi.MarketData.Models.State
         public HistoricoCotacaoState()
         {
             EXT_ID = "";
-            FeedId = "";
+            ProcessId = 0;
             Ticker = "";
             NomeResumido = "";
             EspecificacaoPapel = "";
@@ -43,7 +43,7 @@ namespace Tebaldi.MarketData.Models.State
             Schema.ObjectName = "TB_IMP_HISTORICO_COTACAO";
             Schema.EXT_ID = "EXT_ID";
             Schema.AtivoId = "AtivoId";
-            Schema.FeedId = "FeedId";
+            Schema.ProcessId = "ProcessId";
             Schema.DataPregao = "DataPregao";
             Schema.Ticker = "Ticker";
             Schema.TipoMercado = "TipoMercado";
@@ -72,7 +72,7 @@ namespace Tebaldi.MarketData.Models.State
             // Nome das colunas
             public string EXT_ID;
             public string AtivoId;
-            public string FeedId;
+            public string ProcessId;
             public string DataPregao;
             public string Ticker;
             public string TipoMercado;

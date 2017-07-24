@@ -48,7 +48,7 @@ namespace Tebaldi.MarketData
 
             table.Columns.Add(obj.Schema.EXT_ID, typeof(String));
             table.Columns.Add(obj.Schema.AtivoId, typeof(Int32));
-            table.Columns.Add(obj.Schema.FeedId, typeof(String));
+            table.Columns.Add(obj.Schema.ProcessId, typeof(String));
             table.Columns.Add(obj.Schema.DataPregao, typeof(DateTime));
             table.Columns.Add(obj.Schema.Ticker, typeof(String));
             table.Columns.Add(obj.Schema.TipoMercado, typeof(Int32));
@@ -75,7 +75,7 @@ namespace Tebaldi.MarketData
 
             lst.Add(obj.Schema.EXT_ID);
             lst.Add(obj.Schema.AtivoId);
-            lst.Add(obj.Schema.FeedId);
+            lst.Add(obj.Schema.ProcessId);
             lst.Add(obj.Schema.DataPregao);
             lst.Add(obj.Schema.Ticker);
             lst.Add(obj.Schema.TipoMercado);

@@ -11,6 +11,7 @@ namespace Tebaldi.MarketData.Models.State
         public int Id { get; set; }
         public string ExtId { get; set; }
         public int TebBizAtivoId { get; set; }
+        public string Ticker { get; set; }
 
         public SchemaStruct Schema;
 
@@ -23,6 +24,7 @@ namespace Tebaldi.MarketData.Models.State
             Schema.Id = "Id";
             Schema.ExtId = "EXT_ID";
             Schema.TebBizAtivoId = "TebaldiBiz_AtivoId";
+            Schema.Ticker = "Ticker";
         }
         #endregion
 
@@ -37,6 +39,7 @@ namespace Tebaldi.MarketData.Models.State
             public string Id;
             public string ExtId;
             public string TebBizAtivoId;
+            public string Ticker;
         }
         #endregion
     }

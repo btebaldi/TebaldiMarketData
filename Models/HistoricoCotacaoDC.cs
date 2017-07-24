@@ -55,7 +55,8 @@ namespace Tebaldi.MarketData.Models
                                        {
                                            Id = Convert.ToInt32(dr[obj.Schema.Id]),
                                            ExtId = Convert.ToString(dr[obj.Schema.ExtId]),
-                                           TebBizAtivoId = Convert.ToInt32(dr[obj.Schema.TebBizAtivoId])
+                                           TebBizAtivoId = Convert.ToInt32(dr[obj.Schema.TebBizAtivoId]),
+                                           Ticker = Convert.ToString(dr[obj.Schema.Ticker])
                                        }).ToList();
             return lst;
         }
@@ -244,8 +245,8 @@ namespace Tebaldi.MarketData.Models
             if (String.IsNullOrEmpty(item.ExtId))
             { strMsg += "Identificador externo do ativo invalido." + Environment.NewLine; }
 
-            //if (String.IsNullOrEmpty(item.CodEmpresa))
-            //{ strMsg += "O Codigo da empresa deve ser preenchido." + Environment.NewLine; }
+            if (String.IsNullOrEmpty(item.Ticker))
+            { strMsg += "O Ticker deve ser preenchido." + Environment.NewLine; }
 
             if (item.Id < 0)
             { strMsg += "O identificador deve ser positivo." + Environment.NewLine; }
@@ -301,6 +302,8 @@ namespace Tebaldi.MarketData.Models
                 xmlObj.SetAttribute("EXT_ID", item.ExtId);
 
                 xmlObj.SetAttribute("TebaldiBiz_AtivoId", item.TebBizAtivoId.ToString());
+
+                xmlObj.SetAttribute("Ticker", item.Ticker);
 
                 root.AppendChild(xmlObj);
 
